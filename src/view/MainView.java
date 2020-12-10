@@ -175,7 +175,7 @@ public class MainView extends JFrame {
 		this.btnExportPath.setEnabled(this.translatedPo != null && !this.translatedPo.isEmpty());
 		this.btnExport.setEnabled(this.exportFile != null);
 
-		this.lblExportPathWrn.setVisible(this.checkFile(this.exportFile, false, MainView.PO_EXTENSION));
+		this.lblExportPathWrn.setVisible(MainView.checkFile(this.exportFile, false, MainView.PO_EXTENSION));
 	}
 
 	private void btnFileChooserActionPerformed(final PGButton caller, final String title, final JLabel label,
@@ -282,7 +282,7 @@ public class MainView extends JFrame {
 				try {
 					Desktop.getDesktop().open(this.exportFile);
 				} catch (final IOException e) {
-					PGMessage.showErrDialog(this, "errInternalError");
+					PGMessage.showErrDialog(this, MainView.LOC.getRes("errInternalError"));
 					e.printStackTrace();
 				}
 			}
@@ -299,11 +299,11 @@ public class MainView extends JFrame {
 	}
 
 	private boolean checkParams() {
-		if (!this.checkFile(this.translatedFile, false, MainView.TXT_EXTENSION)) {
+		if (!MainView.checkFile(this.translatedFile, false, MainView.TXT_EXTENSION)) {
 			PGMessage.showErrDialog(this, MainView.LOC.getRes("errTranslatedFile"));
 			return false;
 		}
-		if (!this.checkFile(this.poFile, false, MainView.PO_EXTENSION)) {
+		if (!MainView.checkFile(this.poFile, false, MainView.PO_EXTENSION)) {
 			PGMessage.showErrDialog(this, MainView.LOC.getRes("errPoFile"));
 			return false;
 		}
@@ -312,7 +312,7 @@ public class MainView extends JFrame {
 	}
 
 	private boolean checkExportParams() {
-		if (!this.checkFile(this.exportFile, true, MainView.PO_EXTENSION)) {
+		if (!MainView.checkFile(this.exportFile, true, MainView.PO_EXTENSION)) {
 			PGMessage.showErrDialog(this, MainView.LOC.getRes("errExportPath"));
 			return false;
 		}
@@ -320,14 +320,14 @@ public class MainView extends JFrame {
 		return true;
 	}
 
-	private boolean checkFile(final File file, final boolean createIfAbsent, final String fileExtension) {
+	private static boolean checkFile(final File file, final boolean createIfAbsent, final String fileExtension) {
 		if (file == null || !file.exists() || !file.isFile()) {
 			if (createIfAbsent) {
 				try {
 					file.createNewFile();
 					return true;
 				} catch (final IOException e) {
-					PGMessage.showErrDialog(this, "errInternalError");
+					//PGMessage.showErrDialog(this, MainView.LOC.getRes("errInternalError"));
 					e.printStackTrace();
 				}
 			}
